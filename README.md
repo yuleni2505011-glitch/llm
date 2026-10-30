@@ -53,3 +53,24 @@ streamlit run app.py
 - [Python](https://www.python.org/)
 - [Streamlit](https://streamlit.io/) (Interfaz de usuario web)
 - [Google Generative AI](https://ai.google.dev/) (Modelo de IA)
+
+## Ejecutar en Windows
+
+Requisitos: Python 3.12, conexión a internet y una clave API de Gemini.
+
+Desde la carpeta principal del repositorio:
+
+```powershell
+py -3.12 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r asistente_escritura/requirements.txt
+.\.venv\Scripts\python.exe -m streamlit run asistente_escritura/app.py
+```
+
+Abre http://localhost:8501, introduce tu clave API y selecciona
+un modelo disponible. Elige una tarea, escribe el texto o tema
+y pulsa el botón correspondiente.
+
+La disponibilidad del servicio depende del modelo y de la cuota
+de la cuenta. No incluyas claves API en el repositorio.
+
+Para detener la aplicación, presiona Ctrl + C en la terminal.

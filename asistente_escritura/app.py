@@ -13,7 +13,18 @@ api_key = st.text_input("Ingresa tu Google Gemini API Key para empezar:", type="
 
 if api_key:
     genai.configure(api_key=api_key)
-    
+
+    modelos = [
+        modelo.name
+        for modelo in genai.list_models()
+        if "generateContent" in modelo.supported_generation_methods
+    ]
+
+    if not modelos:
+        st.error("No hay modelos disponibles para generar texto.")
+        st.stop()
+
+    modelo_elegido = st.selectbox("Selecciona el modelo:", modelos)
     # Seleccionar la tarea
     tarea = st.selectbox(
         "¿En qué te puedo ayudar hoy?",
@@ -27,7 +38,7 @@ if api_key:
             if texto_usuario:
                 with st.spinner("Revisando tu texto..."):
                     try:
-                        model = genai.GenerativeModel('gemini-1.5-pro')
+                        model = genai.GenerativeModel(modelo_elegido)
                         prompt = f"Corrige la ortografía y mejora la redacción y estilo del siguiente texto. Devuelve solo el texto corregido:\n\n{texto_usuario}"
                         response = model.generate_content(prompt)
                         st.subheader("Texto Mejorado:")
@@ -43,7 +54,7 @@ if api_key:
             if texto_usuario:
                 with st.spinner("Pensando en ideas..."):
                     try:
-                        model = genai.GenerativeModel('gemini-1.5-pro')
+                        model = genai.GenerativeModel(modelo_elegido)
                         prompt = f"Continúa escribiendo el siguiente texto de forma coherente y creativa (agrega un párrafo más):\n\n{texto_usuario}"
                         response = model.generate_content(prompt)
                         st.subheader("Sugerencia:")
@@ -61,7 +72,7 @@ if api_key:
             if tema:
                 with st.spinner("Escribiendo..."):
                     try:
-                        model = genai.GenerativeModel('gemini-1.5-pro')
+                        model = genai.GenerativeModel(modelo_elegido)
                         prompt = f"Escribe un texto sobre: '{tema}'. El tono del texto debe ser {tono.lower()}."
                         response = model.generate_content(prompt)
                         st.subheader("Texto Generado:")
